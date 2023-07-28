@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addMenu } from './redux/Action';
 import SubLeftnav from './SubLeftnav';
 
+
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -24,6 +26,9 @@ const Leftnav = () => {
       setShowInput(false);
     }
   };
+
+
+  
 
  
   return (
@@ -79,7 +84,8 @@ const Leftnav = () => {
                   )}
                   <Disclosure.Panel as="ul" className="mt-1 px-2 space-y-1">
                   {list.map((item,index) => (
-                      <SubLeftnav key={item.name} item={item} index={index}/>
+                      <SubLeftnav key={index} item={item} index={index}/>
+                      
                     ))}
                   </Disclosure.Panel>
                 </>

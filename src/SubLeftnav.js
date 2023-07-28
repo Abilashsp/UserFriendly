@@ -1,52 +1,117 @@
-import React, { useState } from 'react';
-import { Fragment } from 'react';
-import { Disclosure } from '@headlessui/react';
-import { ChevronRightIcon } from '@heroicons/react/20/solid';
-import { AiFillPlusSquare } from 'react-icons/ai';
-import { useDispatch, useSelector } from 'react-redux';
-import { addChild } from './redux/Action'; // Correct the import here
-
+import React, { useState } from "react";
+import { Fragment } from "react";
+import { Disclosure } from "@headlessui/react";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { AiFillPlusSquare } from "react-icons/ai";
+import { useDispatch, useSelector } from "react-redux";
+import { addChild } from "./redux/Action";
+import { MdDelete } from "react-icons/md";
+import { deleteMenu } from "./redux/Action";
+import { deleteChild } from "./redux/Action";
+import { IoIosAdd } from "react-icons/io";
+import { editMenu } from "./redux/Action";
+import { editChild } from "./redux/Action";
+import { AiFillEdit} from "react-icons/ai";
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(" ");
 }
 
-const SubLeftnav = ({ item,index }) => { 
-    const childlist = item.children;
-    console.log(childlist)
+const SubLeftnav = ({ item, index }) => {
+  const [isChild,setIsChild]=useState(true);
+  const [editMode, setEditMode] = useState(false);
   const [showInput, setShowInput] = useState(false);
-  const [menuName, setMenuName] = useState('');
+  const [menuName, setMenuName] = useState("");
   const dispatch = useDispatch();
 
   const handleSave = () => {
-    if (menuName.trim() !== '') {
-      dispatch(addChild(index, { name: menuName })); // Use the addChild action with the parent's index
-      setMenuName('');
+    if (menuName.trim() !== "") {
+      if (editMode) {
+        if (item.name && !isChild) {
+          // If in edit mode and it's a menu item, and not a child edit, dispatch editMenu
+          dispatch(editMenu(index, menuName));
+        } else {
+          // If in edit mode and it's a child item or a child edit, dispatch editChild
+          dispatch(editChild(index, menuName));
+        }
+      } else {
+        dispatch(addChild(index, menuName));
+      }
       setShowInput(false);
+      setEditMode(false);
+      setIsChild(false); // Reset the isChild state after handling the edit
     }
   };
+  
 
+  const handledelete = (menuindex) => {
+    dispatch(deleteMenu(menuindex));
+  };
+
+  const handleDeleteChild = (childIndex) => {
+    dispatch(deleteChild(index, childIndex));
+  };
+
+  const handleEditMenu = () => {
+    setMenuName(item.name);
+    setShowInput(true);
+    setEditMode(true);
+  };
+  
+  const handleEditChild = (childName, isChild) => {
+    setMenuName(childName);
+    setShowInput(true);
+    setEditMode(true);
+    setIsChild(isChild); // Add a state to track if it's a child edit or menu edit
+  };
+  
   return (
-    <li key={item.name} className="border-2 p-4 bg-orange-400 rounded-xl">
+    <li
+      key={item.name}
+      className="border-2 p-4  bg-white dark:bg-gray-800 rounded-xl"
+    >
       <Disclosure as="div">
         {({ open }) => (
           <>
             <Disclosure.Button
               className={classNames(
-                'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold',
-                open ? 'shadown  text-white' : ' text-white'
+                "flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold",
+                open ? "shadown  text-black-400" : "text-black-400"
               )}
             >
               <ChevronRightIcon
                 className={classNames(
-                  open ? 'rotate-90 text-gray-500' : 'text-gray-400',
-                  'h-5 w-5 shrink-0'
+                  open ? "rotate-90 text-gray-500" : "text-gray-400",
+                  "h-5 w-5 shrink-0"
                 )}
                 aria-hidden="true"
               />
               <span>{item.name}</span>
-              <button className="text-xl" onClick={() => setShowInput(!showInput)}>
-                <AiFillPlusSquare />
+              <button
+                type="button"
+                class="text-black-400 w-10 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm py-1 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                onClick={() => {
+                  setMenuName("");
+                  setShowInput(!showInput);
+                  setEditMode(false); // Set edit mode to false for Add button
+                }}
+              >
+                <IoIosAdd className="text-xl" />
+              </button>
+
+              <button
+                type="button"
+                class=" hover:bg-red-700 hover:text-white  w-10 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center  dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 py-1"
+                onClick={() => handledelete(index)}
+              >
+                <MdDelete classname=" text-2xl" />
+              </button>
+              <button
+                type="button"
+                class=" hover:bg-red-700 hover:text-white  w-10 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center  dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 py-1"
+                onClick={handleEditMenu}
+              >
+                <AiFillEdit/>
               </button>
             </Disclosure.Button>
             {showInput && (
@@ -69,12 +134,28 @@ const SubLeftnav = ({ item,index }) => {
               </div>
             )}
             <Disclosure.Panel className="mt-1 px-2 space-y-1">
-              {childlist.map((item) => (
-                      <li key={item.name} className="border-2 p-2 bg-amber-300 rounded-xl">
-                     {item.name}
-                     
-                      </li>
-                    ))}
+              {item.children.map((item, Index) => (
+                <li
+                  key={Index}
+                  className="border-2 p-4 bg-amber-300 rounded-xl flex justify-around"
+                >
+                  <span> {item.name}</span>
+                  <button
+                    type="button"
+                    class=" hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 w-5 py-1"
+                    onClick={() => handleDeleteChild(Index)}
+                  >
+                    <MdDelete />
+                  </button>
+                  <button
+                type="button"
+                class=" hover:bg-red-700 hover:text-white  w-10 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center  dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 py-1"
+                onClick={() => handleEditChild(item.name, true)}
+              >
+                <AiFillEdit/>
+              </button>
+                </li>
+              ))}
             </Disclosure.Panel>
           </>
         )}
