@@ -48,10 +48,10 @@ export const editMenu = (menuIndex, newName) => ({
   },
 });
 
-export const editChild = ( childIndex, newName) => ({
+export const editChild = (menuIndex, childIndex, newName) => ({
   type: EDIT_CHILD,
   payload: {
-
+    menuIndex,
     childIndex,
     newName,
   },

@@ -1,7 +1,11 @@
 import React from 'react';
 import { BiText } from 'react-icons/bi';
+import { UseSelector, useSelector } from 'react-redux/es/hooks/useSelector';
+import Rightnav from './Rightnav';
 
-function Icons({ buttons,activeButton, setActiveButton }) {
+function Icons({ activeButton, setActiveButton }) {
+
+  const buttons= useSelector(state=>state.buttons)
   
 
   return (
@@ -16,6 +20,7 @@ function Icons({ buttons,activeButton, setActiveButton }) {
           {button.icon}
         </button>
       ))}
+      
     </div>
   );
 }

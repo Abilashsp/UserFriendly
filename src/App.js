@@ -8,20 +8,17 @@ import Icons from './Icons';
 import {FaBold,FaUnderline } from 'react-icons/fa';
 import {BiItalic,BiText } from 'react-icons/bi';
 import {RiOverline } from 'react-icons/ri';
+import {CiTextAlignCenter,CiTextAlignRight,CiTextAlignLeft,CiTextAlignJustify } from 'react-icons/ci';
+import { UseSelector, useSelector } from 'react-redux/es/hooks/useSelector';
 
 
 
 function App() {
   
-
+  const [InputValue, setInputValue] = useState('');
   const [activeButton, setActiveButton] = useState(null);
-  const [button1Styles, setButton1Styles] = useState({
-   
-  });
-  const buttons = [
-    { id: 1, icon: <BiText /> },
-    
-  ];
+  const buttons= useSelector(state=>state.buttons)
+
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
   };
@@ -37,39 +34,35 @@ function App() {
   return (
     <div className="App ">
       <div className='h-28 w-full mt-4 border-4 flex '><Icons
-    buttons={buttons}
+     buttons={buttons}
     activeButton={activeButton}
     setActiveButton={handleButtonClick} 
   /> 
   <div>
   {activeButton === 1 && (
-        <div className="h-full  p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-4 grid grid-cols-4 gap-4" >
-         <button><FaBold/></button>
-         <button><FaUnderline/></button>
-         <button><BiItalic/></button>
-         <button><  RiOverline/></button>
-       
+        <div className="h-full   bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-4 grid grid-cols-4  " >
+        <div className='flex border-2 '>
+         <button  className='border-2'><FaBold/></button>
+         <button   className='border-2'><FaUnderline/></button>    
+         <button  className='border-2'><BiItalic/></button>
+         <button  className='border-2'><  RiOverline/></button>
+         </div>
+         <div className='flex px-1'>
+          <button  className='border-2'><  CiTextAlignCenter/></button>
+          <button  className='border-2'>< CiTextAlignLeft /></button>
+          <button  className='border-2'>< CiTextAlignRight/></button> 
+          <button  className='border-2'>< CiTextAlignJustify/></button>  
+          </div>
+
+
+
+
         </div>
       )}
 
       {activeButton === 2 && (
         <div>
-          <label>
-            Background Color:
-            <input
-              type="text"
-           
-             
-            />
-          </label>
-          <label>
-            Text Size:
-            <input
-              type="text"
-            
-             
-            />
-          </label>
+          
           </div>
  )}
           </div>
@@ -78,8 +71,12 @@ function App() {
        
   <div className='flex'>
       <Leftnav/>
-     <Centerbar/>
-     <Rightnav   
+     <Centerbar InputValue={InputValue}/>
+     <Rightnav   buttons={buttons}
+    activeButton={activeButton}
+    setActiveButton={handleButtonClick} 
+    InputValue={InputValue}
+    setInputValue={setInputValue}
       />
      
      </div>

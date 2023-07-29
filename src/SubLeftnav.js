@@ -11,14 +11,17 @@ import { deleteChild } from "./redux/Action";
 import { IoIosAdd } from "react-icons/io";
 import { editMenu } from "./redux/Action";
 import { editChild } from "./redux/Action";
-import { AiFillEdit} from "react-icons/ai";
+import { AiFillEdit } from "react-icons/ai";
+import Draggable from "react-draggable";
+
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const SubLeftnav = ({ item, index }) => {
-  const [isChild,setIsChild]=useState(true);
+  const [ChildIndex,setChildIndex]=useState(null);
+  const [isChild, setIsChild] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [menuName, setMenuName] = useState("");
@@ -27,12 +30,11 @@ const SubLeftnav = ({ item, index }) => {
   const handleSave = () => {
     if (menuName.trim() !== "") {
       if (editMode) {
-        if (item.name && !isChild) {
-          // If in edit mode and it's a menu item, and not a child edit, dispatch editMenu
-          dispatch(editMenu(index, menuName));
+        if (isChild) {
+          dispatch(editChild(index,ChildIndex, menuName));
+       
         } else {
-          // If in edit mode and it's a child item or a child edit, dispatch editChild
-          dispatch(editChild(index, menuName));
+          dispatch(editMenu(index, menuName));
         }
       } else {
         dispatch(addChild(index, menuName));
@@ -42,7 +44,6 @@ const SubLeftnav = ({ item, index }) => {
       setIsChild(false); // Reset the isChild state after handling the edit
     }
   };
-  
 
   const handledelete = (menuindex) => {
     dispatch(deleteMenu(menuindex));
@@ -57,14 +58,15 @@ const SubLeftnav = ({ item, index }) => {
     setShowInput(true);
     setEditMode(true);
   };
-  
-  const handleEditChild = (childName, isChild) => {
+
+  const handleEditChild = (childName, isChild,childIndex) => {
     setMenuName(childName);
     setShowInput(true);
     setEditMode(true);
-    setIsChild(isChild); // Add a state to track if it's a child edit or menu edit
+    setIsChild(isChild);
+    setChildIndex(childIndex)
   };
-  
+
   return (
     <li
       key={item.name}
@@ -87,13 +89,14 @@ const SubLeftnav = ({ item, index }) => {
                 aria-hidden="true"
               />
               <span>{item.name}</span>
+              
               <button
                 type="button"
                 class="text-black-400 w-10 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm py-1 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={() => {
                   setMenuName("");
                   setShowInput(!showInput);
-                  setEditMode(false); // Set edit mode to false for Add button
+                  setEditMode(false); 
                 }}
               >
                 <IoIosAdd className="text-xl" />
@@ -111,7 +114,7 @@ const SubLeftnav = ({ item, index }) => {
                 class=" hover:bg-red-700 hover:text-white  w-10 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center  dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 py-1"
                 onClick={handleEditMenu}
               >
-                <AiFillEdit/>
+                <AiFillEdit />
               </button>
             </Disclosure.Button>
             {showInput && (
@@ -148,12 +151,12 @@ const SubLeftnav = ({ item, index }) => {
                     <MdDelete />
                   </button>
                   <button
-                type="button"
-                class=" hover:bg-red-700 hover:text-white  w-10 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center  dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 py-1"
-                onClick={() => handleEditChild(item.name, true)}
-              >
-                <AiFillEdit/>
-              </button>
+                    type="button"
+                    class=" hover:bg-red-700 hover:text-white  w-10 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center  dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 py-1"
+                    onClick={() => handleEditChild(item.name, true,Index)}
+                  >
+                    <AiFillEdit />
+                  </button>
                 </li>
               ))}
             </Disclosure.Panel>

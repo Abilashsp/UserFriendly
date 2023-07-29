@@ -1,8 +1,15 @@
 
 import { ADD_MENU,ADD_CHILD,DELETE_MENU, DELETE_CHILD,EDIT_MENU,EDIT_CHILD  } from './Action';
+import {BiItalic,BiText } from 'react-icons/bi';
 
 const initialState = {
   navigation: [],
+   
+   buttons : [
+    { id: 1, icon: <BiText /> },
+    
+  ],
+
  
 };
 
