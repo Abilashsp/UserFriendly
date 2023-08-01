@@ -1,16 +1,17 @@
-
-import { ADD_MENU,ADD_CHILD,DELETE_MENU, DELETE_CHILD,EDIT_MENU,EDIT_CHILD  } from './Action';
-import {BiItalic,BiText } from 'react-icons/bi';
+import {
+  ADD_MENU,
+  ADD_CHILD,
+  DELETE_MENU,
+  DELETE_CHILD,
+  EDIT_MENU,
+  EDIT_CHILD,
+} from "./Action";
+import { BiItalic, BiText } from "react-icons/bi";
 
 const initialState = {
   navigation: [],
-   
-   buttons : [
-    { id: 1, icon: <BiText /> },
-    
-  ],
 
- 
+  buttons: [{ id: 1, icon: <BiText /> }],
 };
 
 const reducer = (state = initialState, action) => {
@@ -18,42 +19,49 @@ const reducer = (state = initialState, action) => {
     case ADD_MENU:
       return {
         ...state,
-        navigation: [...state.navigation, { name:action.payload.name, children: [] }],
+        navigation: [
+          ...state.navigation,
+          { name: action.payload.name, children: [] },
+        ],
       };
 
-      case ADD_CHILD:
-        return {
-          ...state,
-          navigation: state.navigation.map((menu,index) =>
-            index === action.payload.id
-              ? { ...menu, children: [...menu.children, { name: action.payload.item }] }
-              : menu
-          ),
-        };
-        
+    case ADD_CHILD:
+      return {
+        ...state,
+        navigation: state.navigation.map((menu, index) =>
+          index === action.payload.id
+            ? {
+                ...menu,
+                children: [...menu.children, { name: action.payload.item }],
+              }
+            : menu
+        ),
+      };
 
+    case DELETE_MENU:
+      return {
+        ...state,
+        navigation: state.navigation.filter(
+          (_, menuIndex) => menuIndex !== action.payload.menuIndex
+        ),
+      };
 
+    case DELETE_CHILD:
+      return {
+        ...state,
+        navigation: state.navigation.map((menu, menuIndex) =>
+          menuIndex === action.payload.menuIndex
+            ? {
+                ...menu,
+                children: menu.children.filter(
+                  (_, childIndex) => childIndex !== action.payload.childIndex
+                ),
+              }
+            : menu
+        ),
+      };
 
-        case DELETE_MENU:
-          return {
-            ...state,
-            navigation: state.navigation.filter((_, menuIndex) => menuIndex !== action.payload.menuIndex),
-          };
-
-          case DELETE_CHILD:
-            return {
-              ...state,
-              navigation: state.navigation.map((menu, menuIndex) =>
-                menuIndex === action.payload.menuIndex
-                  ? {
-                      ...menu,
-                      children: menu.children.filter((_, childIndex) => childIndex !== action.payload.childIndex),
-                    }
-                  : menu
-              ),
-            };
-
-            case EDIT_MENU:
+    case EDIT_MENU:
       return {
         ...state,
         navigation: state.navigation.map((menu, index) =>
@@ -85,8 +93,6 @@ const reducer = (state = initialState, action) => {
         ),
       };
 
-
-        
     default:
       return state;
   }

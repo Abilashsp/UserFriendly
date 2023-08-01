@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
-function Rightnav({ activeButton, setActiveButton, setInputValue, InputValue, handleEnter }) {
-  const buttons = useSelector(state => state.buttons);
+function Rightnav({
+  activeButton,
+  setActiveButton,
+  setInputValue,
+  InputValue,
+  handleEnter,
+}) {
+  const buttons = useSelector((state) => state.buttons);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -23,7 +29,7 @@ function Rightnav({ activeButton, setActiveButton, setInputValue, InputValue, ha
               id="large-input"
               value={InputValue}
               onChange={handleInputChange}
-              placeholder='Enter the Text'
+              placeholder="Enter the Text"
               className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 h-36"
             />
             <button

@@ -14,13 +14,12 @@ import { editChild } from "./redux/Action";
 import { AiFillEdit } from "react-icons/ai";
 import Draggable from "react-draggable";
 
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 const SubLeftnav = ({ item, index }) => {
-  const [ChildIndex,setChildIndex]=useState(null);
+  const [ChildIndex, setChildIndex] = useState(null);
   const [isChild, setIsChild] = useState(true);
   const [editMode, setEditMode] = useState(false);
   const [showInput, setShowInput] = useState(false);
@@ -31,8 +30,7 @@ const SubLeftnav = ({ item, index }) => {
     if (menuName.trim() !== "") {
       if (editMode) {
         if (isChild) {
-          dispatch(editChild(index,ChildIndex, menuName));
-       
+          dispatch(editChild(index, ChildIndex, menuName));
         } else {
           dispatch(editMenu(index, menuName));
         }
@@ -59,12 +57,12 @@ const SubLeftnav = ({ item, index }) => {
     setEditMode(true);
   };
 
-  const handleEditChild = (childName, isChild,childIndex) => {
+  const handleEditChild = (childName, isChild, childIndex) => {
     setMenuName(childName);
     setShowInput(true);
     setEditMode(true);
     setIsChild(isChild);
-    setChildIndex(childIndex)
+    setChildIndex(childIndex);
   };
 
   return (
@@ -89,14 +87,14 @@ const SubLeftnav = ({ item, index }) => {
                 aria-hidden="true"
               />
               <span>{item.name}</span>
-              
+
               <button
                 type="button"
                 class="text-black-400 w-10 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm py-1 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 onClick={() => {
                   setMenuName("");
                   setShowInput(!showInput);
-                  setEditMode(false); 
+                  setEditMode(false);
                 }}
               >
                 <IoIosAdd className="text-xl" />
@@ -153,7 +151,7 @@ const SubLeftnav = ({ item, index }) => {
                   <button
                     type="button"
                     class=" hover:bg-red-700 hover:text-white  w-10 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center  dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 py-1"
-                    onClick={() => handleEditChild(item.name, true,Index)}
+                    onClick={() => handleEditChild(item.name, true, Index)}
                   >
                     <AiFillEdit />
                   </button>
