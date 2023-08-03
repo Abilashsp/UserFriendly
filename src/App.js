@@ -17,9 +17,9 @@ import {
   CiTextAlignJustify,
 } from "react-icons/ci";
 import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
+import _ from "lodash";
 
 function App() {
-
   const [id, setid] = useState(1);
   const [InputValue, setInputValue] = useState("");
   const [centerbarValues, setCenterbarValues] = useState([
@@ -30,31 +30,10 @@ function App() {
       underLine: false,
       italics: false,
       straightthrough: false,
-      textaligncenter: false,
-      textalignright: false,
-      textalignleft: false,
-      textjustify: false,
-      textblack: false,
-      textviolet: false,
-      textblue: false,
-      textgreen: false,
-      textred: false,
-      textbrown: false,
-      textorange: false,
-      textgray: false,
-      textbgpink: false,
-      textbgyellow: false,
-      textbgLightblue: false,
-      textbgblack: false,
-      textbgviolet: false,
-      textbgblue: false,
-      textbggreen: false,
-      textbgred: false,
-      textbgbrown: false,
-      textbgorange: false,
-      textbgindigo: false,
-
-
+      textStyle: [],
+      textalign: "",
+      textColor: "",
+      textBgColor: "",
     },
   ]);
   const [activeButton, setActiveButton] = useState(null);
@@ -63,10 +42,14 @@ function App() {
   const [textid, settextid] = useState(null);
 
   const text = [
-    { id: "bold", icon: <FaBold /> },
-    { id: "underline", icon: <FaUnderline /> },
-    { id: "italic", icon: <BiItalic /> },
-    { id: "Strightthroughline", icon: <AiOutlineStrikethrough /> },
+    { id: "bold", icon: <FaBold />, class: "b" },
+    { id: "underline", icon: <FaUnderline />, class: "underline" },
+    { id: "italic", icon: <BiItalic />, class: "italic" },
+    {
+      id: "Strightthroughline",
+      icon: <AiOutlineStrikethrough />,
+      class: "strik",
+    },
   ];
 
   const textalign = [
@@ -76,23 +59,24 @@ function App() {
     { id: "text-align-justify", icon: <CiTextAlignJustify /> },
   ];
 
-
   const textcolor = [
-    { id: "text-color-black", icon: <BiFontColor />, color: "black" },
-    { id: "text-color-violet", icon: <BiFontColor />, color: "violet" },
-    { id: "text-color-blue", icon: <BiFontColor />, color: "blue" },
+    { id: "text-color-black", icon: <BiFontColor />, color: "text-black" },
+    {
+      id: "text-color-violet",
+      icon: <BiFontColor />,
+      color: "text-violet-600",
+    },
+    { id: "text-color-blue", icon: <BiFontColor />, color: "text-blue-600" },
     { id: "text-color-green", icon: <BiFontColor />, color: "green" },
     { id: "text-color-red", icon: <BiFontColor />, color: "red" },
     { id: "text-color-brown", icon: <BiFontColor />, color: "brown" },
     { id: "text-color-orange", icon: <BiFontColor />, color: "orange" },
     { id: "text-color-gray", icon: <BiFontColor />, color: "gray" },
-
-
-  ]
+  ];
 
   const textbackgroundcolor = [
-    { id: "text-bg-pink", icon: <MdFontDownload />, color: "pink" },
-    { id: "text-bg-yellow", icon: <MdFontDownload />, color: "yellow" },
+    { id: "text-bg-pink", icon: <MdFontDownload />, color: "bg-pink-400" },
+    { id: "text-bg-yellow", icon: <MdFontDownload />, color: "bg-yellow-400" },
     { id: "text-bg-LightBlue", icon: <MdFontDownload />, color: "LightBlue" },
     { id: "text-bg-black", icon: <MdFontDownload />, color: "black" },
     { id: "text-bg-violet", icon: <MdFontDownload />, color: "violet" },
@@ -102,15 +86,12 @@ function App() {
     { id: "text-bg-brown", icon: <MdFontDownload />, color: "brown" },
     { id: "text-bg-orange", icon: <MdFontDownload />, color: "orange" },
     { id: "text-bg-Indigo", icon: <MdFontDownload />, color: "Indigo" },
-
-
-  ]
-
-
+  ];
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);
   };
+
   const handelTextButton = (id) => {
     settextbuttons(!textbuttons);
     settextid(id);
@@ -127,89 +108,108 @@ function App() {
     }
   };
 
-
   const handleButtons = (buttonId) => {
     if (textid !== null) {
       setCenterbarValues((prevValues) =>
         prevValues.map((item, index) => {
           if (item.id === textid) {
-            switch (buttonId) {
-              case "bold":
-                return { ...item, bold: !item.bold };
-              case "underline":
-                return { ...item, underLine: !item.underLine };
-              case "italic":
-                return { ...item, italics: !item.italics };
-              case "Strightthroughline":
-                return { ...item, straightthrough: !item.straightthrough };
-              case "text-align-center":
-                return { ...item, textaligncenter: !item.textaligncenter };
-              case "text-align-left":
-                return { ...item, textalignright: !item.textalignright };
-              case "text-align-right":
-                return { ...item, textalignleft: !item.textalignleft };
-              case "text-align-justify":
-                return { ...item, textjustify: !item.textjustify };
+            const _textColor = _.find(textcolor, { id: buttonId });
+            const _textBgColor = _.find(textbackgroundcolor, { id: buttonId });
 
-                //textcolor
+            const _text = _.find(text, { id: buttonId });
 
-              case "text-color-black":
-                return { ...item, textblack: !item.textblack };
-              case "text-color-violet":
-                return { ...item, textviolet: !item.textviolet };
-              case "text-color-blue":
-                return { ...item, textblue: !item.textblue };
-              case "text-color-green":
-                return { ...item, textgreen: !item.textgreen };
-              case "text-color-red":
-                return { ...item, textred: !item.textred };
-              case "text-color-brown":
-                return { ...item, textbrown: !item.textbrown };
-              case "text-color-orange":
-                return { ...item, textorange: !item.textorange };
-              case "text-color-gray":
-                return { ...item, textgray: !item.textgray };
+            if (_textColor) item.textColor = _textColor.color;
+            if (_textBgColor) item.textBgColor = _textBgColor.color;
+            if (_text) {
+              // init Text style array.
+              if (!item.textStyle) item.textStyle = [];
 
-
-              //bg
-
-              case "text-bg-pink":
-                return { ...item, textbgpink: !item.textbgpink };
-              case "text-bg-yellow":
-                return { ...item,  textbgyellow: !item. textbgyellow };
-              case "text-bg-LightBlue":
-                return { ...item,textbgLightblue: !item.textbgLightblue };
-              case "text-bg-black":
-                return { ...item, textbgblack: !item.textbgblack };
-              case "text-bg-violet":
-                return { ...item, textbgviolet: !item.textbgviolet};
-              case "text-bg-blue":
-                return { ...item, textbgblue: !item. textbgblue };
-              case "text-bg-green":
-                return { ...item,textbggreen: !item.textbggreen };
-              case "text-bg-red":
-                return { ...item, textbgred: !item.textbgred };
-              case "text-bg-brown":
-                return { ...item, textbgbrown: !item.textbgbrown };
-              case "text-bg-orange":
-                return { ...item,  textbgorange: !item. textbgorange };
-              case "text-bg-Indigo":
-                return { ...item, textbgindigo: !item.textbgindigo};
-              default:
-                return item;
+              // Check if its already exist.
+              if (item.textStyle?.includes(_text.class)) {
+                //Remove style
+                item.textStyle = item.textStyle?.filter(
+                  (val) => val !== _text.class
+                );
+              } else {
+                // Add style
+                item.textStyle.push(_text.class);
+              }
             }
-          } else {
-            return item;
+            // switch (buttonId) {
+            //   case "bold":
+            //     return { ...item, bold: !item.bold };
+            //   case "underline":
+            //     return { ...item, underLine: !item.underLine };
+            //   case "italic":
+            //     return { ...item, italics: !item.italics };
+            //   case "Strightthroughline":
+            //     return { ...item, straightthrough: !item.straightthrough };
+            //   case "text-align-center":
+            //     return { ...item, textaligncenter: !item.textaligncenter };
+            //   case "text-align-left":
+            //     return { ...item, textalignright: !item.textalignright };
+            //   case "text-align-right":
+            //     return { ...item, textalignleft: !item.textalignleft };
+            //   case "text-align-justify":
+            //     return { ...item, textjustify: !item.textjustify };
+
+            //   //textcolor
+
+            //   case "text-color-black":
+            //     return { ...item, textblack: !item.textblack };
+            //   case "text-color-violet":
+            //     return { ...item, textviolet: !item.textviolet };
+            //   case "text-color-blue":
+            //     return { ...item, textblue: !item.textblue };
+            //   case "text-color-green":
+            //     return { ...item, textgreen: !item.textgreen };
+            //   case "text-color-red":
+            //     return { ...item, textred: !item.textred };
+            //   case "text-color-brown":
+            //     return { ...item, textbrown: !item.textbrown };
+            //   case "text-color-orange":
+            //     return { ...item, textorange: !item.textorange };
+            //   case "text-color-gray":
+            //     return { ...item, textgray: !item.textgray };
+
+            //   //bg
+
+            //   case "text-bg-pink":
+            //     return { ...item, textbgpink: !item.textbgpink };
+            //   case "text-bg-yellow":
+            //     return { ...item, textbgyellow: !item.textbgyellow };
+            //   case "text-bg-LightBlue":
+            //     return { ...item, textbgLightblue: !item.textbgLightblue };
+            //   case "text-bg-black":
+            //     return { ...item, textbgblack: !item.textbgblack };
+            //   case "text-bg-violet":
+            //     return { ...item, textbgviolet: !item.textbgviolet };
+            //   case "text-bg-blue":
+            //     return { ...item, textbgblue: !item.textbgblue };
+            //   case "text-bg-green":
+            //     return { ...item, textbggreen: !item.textbggreen };
+            //   case "text-bg-red":
+            //     return { ...item, textbgred: !item.textbgred };
+            //   case "text-bg-brown":
+            //     return { ...item, textbgbrown: !item.textbgbrown };
+            //   case "text-bg-orange":
+            //     return { ...item, textbgorange: !item.textbgorange };
+            //   case "text-bg-Indigo":
+            //     return { ...item, textbgindigo: !item.textbgindigo };
+            //   default:
+            //     return item;
+            // }
           }
+
+          return item;
         })
       );
     }
   };
 
-
   return (
     <div className="App ">
-      <div className="h-28 w-full mt-4 border-4 flex ">
+      <div className="flex w-full mt-4 border-4 h-28 ">
         <Icons
           buttons={buttons}
           activeButton={activeButton}
@@ -217,12 +217,12 @@ function App() {
         />
         <div>
           {textid && (
-            <div className="h-full   bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 p-4 grid grid-cols-3 ">
+            <div className="grid h-full grid-cols-3 p-4 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
               <div className="flex items-center">
                 {text.map((button) => (
                   <button
                     key={button.id}
-                    className="w-2/5 h-6 border-2  rounded-lg "
+                    className="w-2/5 h-6 border-2 rounded-lg "
                     onClick={() => handleButtons(button.id)}
                   >
                     {button.icon}
@@ -230,12 +230,14 @@ function App() {
                 ))}
               </div>
 
-              <div className="flex px-1 items-center">
+              <div className="flex items-center px-1">
                 {textalign.map((button) => (
-                  <button key={button.id}  className="w-2/5 h-6 border-2  rounded-lg "
-                    onClick={() => handleButtons(button.id)}>
+                  <button
+                    key={button.id}
+                    className="w-2/5 h-6 border-2 rounded-lg "
+                    onClick={() => handleButtons(button.id)}
+                  >
                     {button.icon}
-
                   </button>
                 ))}
               </div>
@@ -243,7 +245,7 @@ function App() {
                 {textcolor.map((button) => (
                   <button
                     key={button.id}
-                    className=" text-2xl rounded-lg w-3/5 h-6 border-2"
+                    className="w-3/5 h-6 text-2xl border-2 rounded-lg "
                     style={{ color: button.color }}
                     onClick={() => handleButtons(button.id)}
                   >
@@ -256,7 +258,7 @@ function App() {
                 {textbackgroundcolor.map((button) => (
                   <button
                     key={button.id}
-                    className=" text-2xl rounded-lg  w-/5  border-2 ml-1 "
+                    className="ml-1 text-2xl border-2 rounded-lg w-/5"
                     style={{ color: button.color }}
                     onClick={() => handleButtons(button.id)}
                   >
@@ -264,13 +266,7 @@ function App() {
                   </button>
                 ))}
               </div>
-
-
-
-
             </div>
-
-
           )}
         </div>
       </div>
