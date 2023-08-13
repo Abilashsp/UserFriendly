@@ -14,7 +14,18 @@ import { VscTable } from "react-icons/vsc";
 
 
 const initialState = {
-  navigation: [{id:2,name:"History",children:[],Child:[]}],
+  navigation: [
+    {
+      id: 2,
+      name: "History",
+      children: [
+        {
+          Child: []
+        }
+      ],
+    },
+  ],
+  
 
   buttons: [{ id: 1, icon: <BiText />},
             {id:2,icon:<IoImages/>},
@@ -49,16 +60,16 @@ const reducer = (state = initialState, action) => {
         };
 
 
-        case  ADD_CHILDCHILD:
+        case ADD_CHILD2:
           return {
             ...state,
-            navigation: state.navigation.map((menu) => {
+            navigation: state.navigation.map((menu,index) => {
               if ( menu.id === action.payload.id){
                 return {
                   ...menu,
-                  Child: [
-                    ...menu.children.Child,
-                    { name: action.payload.item },
+                  children: [
+                    ...menu.children,
+                    { name: action.payload.item,Child:[] },
                   ],
                 };
               }
@@ -66,6 +77,35 @@ const reducer = (state = initialState, action) => {
             }),
           };
 
+
+
+
+
+          case ADD_CHILDCHILD:
+            return {
+              ...state,
+              navigation: state.navigation.map((menu) => {
+                if (menu.id === action.payload.id) {
+                  return {
+                    ...menu,
+                    children: menu.children.map((child) => {
+                      if (child.id === action.payload.childId) {
+                        return {
+                          ...child,
+                          Child: [
+                            ...child.Child,
+                            { name: action.payload.item },
+                          ],
+                        };
+                      }
+                      return child;
+                    }),
+                  };
+                }
+                return menu;
+              }),
+            };
+          
 
       
 

@@ -113,7 +113,7 @@ function App() {
     settextid(id);
   };
 
-const i=2;
+const i=0;
   
 
   const handleEnter = () => {
@@ -125,7 +125,7 @@ const i=2;
       ]);
   
           dispatch(addChild2(i, InputValue));
-          dispatch(addChildchild(i,history))
+          
           setInputValue("");
        
       
@@ -184,7 +184,7 @@ const i=2;
                 },
               ]);
             }
-  
+            dispatch(addChildchild(i,newItem))
             return newItem;
           }
           return item;

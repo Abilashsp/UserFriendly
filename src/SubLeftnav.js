@@ -135,12 +135,17 @@ const SubLeftnav = ({ item, index }) => {
               </div>
             )}
             <Disclosure.Panel className="mt-1 px-2 space-y-1">
-              {item.children.map((item, Index) => (
+              {item.children.map((Childitem, Index) => (
                 <li
                   key={Index}
                   className="border-2 p-4 bg-amber-300 rounded-xl flex justify-around"
                 >
-                  <span> {item.name}</span>
+                 <div> 
+  {Childitem.Child.map((ch) => (
+    <span>{ch.name}{console.log(ch.name)}</span>
+  ))}
+</div>
+
                   <button
                     type="button"
                     class=" hover:bg-red-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300  rounded-full   text-center inline-flex items-center dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:focus:ring-blue-800 dark:hover:bg-blue-500 w-5 py-1"
@@ -157,10 +162,14 @@ const SubLeftnav = ({ item, index }) => {
                   </button>
                 </li>
               ))}
+           
             </Disclosure.Panel>
           </>
         )}
       </Disclosure>
+      {
+console.log("item.children[0].Child:", item.children[0].Child)
+}
     </li>
   );
 };
